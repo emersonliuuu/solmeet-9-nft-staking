@@ -1,0 +1,15 @@
+[features]
+seeds = false
+[programs.localnet]
+nft_staking = "NFTS4eKECWLtMmzoo2FJH7Zkoj2jxU8PJicCViyuVGh"
+nft_rarity = "NFTRnyHzbhLx7XWc9PBKJyP68zFsjwNbUtmYTHc1ow3"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
