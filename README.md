@@ -16,7 +16,7 @@ solana config set -k ~/.config/solana/id.json -u <Localnet URL>
 # check balance
 solana balance
 
-git clone git@github.com:emersonliuuu/solmeet-9-nft-staking.git
+git clone git@github.com:Dappio-emerson/solmeet-9-nft-staking.git
 ```
 
 ### Install dependency and replace program key in
