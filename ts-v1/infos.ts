@@ -114,11 +114,11 @@ export async function rarityFilter(
   );
 
   // fetch all poolInfo
-  const dapgPoolInfo = await getPoolInfo(ID.ALL_POOL_INFOS, provider);
+  const allPoolInfo = await getPoolInfo(ID.ALL_POOL_INFOS, provider);
 
   let result: mintInfo[] = [];
   for (let mint of mintList) {
-    for (let pool of dapgPoolInfo) {
+    for (let pool of allPoolInfo) {
       if (
         find(pool.rarityInfo.mintList, (allowedMint) => {
           return allowedMint.toString() == mint.toString();
