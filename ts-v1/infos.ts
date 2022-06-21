@@ -9,6 +9,8 @@ import {
 import { NFT_VAULT_LAYOUT } from "./layout";
 import * as ID from "./ids";
 import { find } from "lodash";
+import { hex } from "@project-serum/anchor/dist/cjs/utils/bytes";
+import { hash } from "@project-serum/anchor/dist/cjs/utils/sha256";
 import { IDL as nftStakingIDL } from "../target/types/nft_staking";
 import { IDL as rarityIDL } from "../target/types/nft_rarity";
 
@@ -193,4 +195,32 @@ export async function getStakedAmount(
   });
 
   return staked_amount;
+}
+
+export async function getPoolInfoKeyFromSeed(
+  admin: PublicKey,
+  COLLECTION_SEED: string,
+  RARITY_SEED: string,
+  nonce: number
+) {
+  let SEED = hex.encode(
+    Buffer.from(COLLECTION_SEED + RARITY_SEED + nonce + "rarity_info")
+  );
+  SEED = hash(SEED.substring(2));
+
+  const rarityInfo = await PublicKey.createWithSeed(
+    admin,
+    SEED.substring(0, 32),
+    ID.NFT_RARITY_PROGRAM_ID
+  );
+
+  // find poolInfoKey
+  const poolInfoKey = (
+    await PublicKey.findProgramAddress(
+      [rarityInfo.toBuffer(), Buffer.from("pool_info")],
+      ID.NFT_STAKING_PROGRAM_ID
+    )
+  )[0];
+
+  return poolInfoKey;
 }

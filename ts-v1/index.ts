@@ -13,6 +13,7 @@ export {
   rarityFilter,
   getPoolInfo,
   getStakedAmount,
+  getPoolInfoKeyFromSeed,
 } from "./infos";
 export * as utils from "./utils";
 export * from "./ids";

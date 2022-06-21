@@ -10,8 +10,6 @@ import {
   MINT_LIST_PATH,
   connection,
 } from "./0_setting";
-import { hex } from "@project-serum/anchor/dist/cjs/utils/bytes";
-import { hash } from "@project-serum/anchor/dist/cjs/utils/sha256";
 import { NFT_RARITY_PROGRAM_ID, NFT_STAKING_PROGRAM_ID } from "../ts-v1";
 
 describe("nft staking v1", () => {
@@ -30,24 +28,13 @@ describe("nft staking v1", () => {
   let nftMintList: PublicKey[] = [];
 
   it("general pool info", async () => {
-    let SEED = hex.encode(
-      Buffer.from(COLLECTION_SEED + RARITY_SEED + 0 + "rarity_info")
-    );
-    SEED = hash(SEED.substring(2));
-
-    const rarityInfo = await PublicKey.createWithSeed(
-      wallet.publicKey,
-      SEED.substring(0, 32),
-      NFT_RARITY_PROGRAM_ID
-    );
-
     // find poolInfoAccount
-    poolInfoKey = (
-      await PublicKey.findProgramAddress(
-        [rarityInfo.toBuffer(), Buffer.from("pool_info")],
-        NFT_STAKING_PROGRAM_ID
-      )
-    )[0];
+    poolInfoKey = await nftFinanceSDK.getPoolInfoKeyFromSeed(
+      wallet.publicKey,
+      COLLECTION_SEED,
+      RARITY_SEED,
+      0
+    );
   });
 
   it("read nft mint", async () => {
