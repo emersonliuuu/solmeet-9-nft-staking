@@ -8,6 +8,8 @@ Or you can learn more about the concept [here](https://book.solmeet.dev/notes/wa
 
 ### Run local validator
 
+Restart local validator, and clone a useful program for creating ATA from Mainnet. See more about the program [here](https://github.com/mercurial-finance/create-ata-if-missing-program)
+
 ```bash=
 # run local validator
 $ solana-test-validator -r -c 9tiP8yZcekzfGzSBmp7n9LaDHRjxP2w7wJj8tpPJtfG -u https://api.mainnet-beta.solana.com
@@ -16,15 +18,18 @@ $ solana-test-validator -r -c 9tiP8yZcekzfGzSBmp7n9LaDHRjxP2w7wJj8tpPJtfG -u htt
 open another console to confirm the setting is same as the one we are going to use later
 
 ```bash=
-solana config get
+$ solana config get
 
 # config solana setting to target wallet and network
-solana config set -k ~/.config/solana/id.json -u <Localnet URL>
+$ solana config set -k ~/.config/solana/id.json -u <Localnet URL>
 
 # check balance
-solana balance
+$ solana balance
 
-git clone git@github.com:Dappio-emerson/solmeet-9-nft-staking.git
+# request airdrop
+$ solana airdrop 5
+
+$ git clone git@github.com:Dappio-emerson/solmeet-9-nft-staking.git
 ```
 
 ### Install dependency and replace program key
