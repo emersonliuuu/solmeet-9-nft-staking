@@ -129,7 +129,7 @@ export interface infoAndNftPair {
 export async function fetchAll(
   provider: anchor.Provider,
   adminKey?: PublicKey
-) {
+): Promise<AllInfo[]> {
   const nftStakingProgram = new anchor.Program(
     nftStakingIDL,
     NFT_STAKING_PROGRAM_ID,
@@ -160,18 +160,12 @@ export async function fetchAll(
   if (adminKey != null && adminKey != undefined) {
     filters = [poolInfoSizeFilter, adminIdMemcmp];
   }
-  // console.log("fetch pool infos");
   const allPoolInfos = await nftStakingProgram.account.poolInfo.all(filters);
 
-  // const rarityInfoSizeFilter: DataSizeFilter = {
-  //   dataSize: nftRarityProgram.account.rarityInfo.size,
-  // };
-  // filters = [rarityInfoSizeFilter];
   filters = [];
   if (adminKey != null && adminKey != undefined) {
     filters = [adminIdMemcmp];
   }
-  // console.log("fetch rarity infos");
   const allRarityInfos = await nftRarityProgram.account.rarityInfo.all(filters);
 
   const allInfos: AllInfo[] = [];
