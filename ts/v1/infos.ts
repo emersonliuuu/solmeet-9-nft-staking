@@ -11,8 +11,8 @@ import * as ID from "./ids";
 import { find } from "lodash";
 import { hex } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import { hash } from "@project-serum/anchor/dist/cjs/utils/sha256";
-import { IDL as nftStakingIDL } from "../target/types/nft_staking";
-import { IDL as rarityIDL } from "../target/types/nft_rarity";
+import { IDL as nftStakingIDL } from "../../target/types/nft_staking";
+import { IDL as rarityIDL } from "../../target/types/nft_rarity";
 
 class PoolInfo {
   constructor(

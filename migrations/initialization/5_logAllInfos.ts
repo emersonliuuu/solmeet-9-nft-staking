@@ -1,14 +1,14 @@
 import * as anchor from "@project-serum/anchor";
 import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import { PublicKey } from "@solana/web3.js";
-import * as nftFinanceSDK from "../ts";
-import { RarityInfo } from "../ts/poolInfos";
+import * as nftFinanceSDK from "../../ts/v2";
+import { RarityInfo } from "../../ts/v2/poolInfos";
 import {
   COLLECTION_SEED,
   RARITY_SEED,
   MINT_LIST_PATH,
   connection,
-} from "./0_setting";
+} from "../0_setting";
 
 describe("log all infos", () => {
   const wallet = NodeWallet.local();

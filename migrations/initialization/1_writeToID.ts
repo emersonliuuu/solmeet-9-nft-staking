@@ -2,17 +2,15 @@ import * as anchor from "@project-serum/anchor";
 import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import { PublicKey } from "@solana/web3.js";
 import * as fs from "fs";
-import { findAssociatedTokenAddress } from "../ts-v1/utils";
-import * as nftFinanceSDK from "../ts-v1";
 import {
   COLLECTION_SEED,
   RARITY_SEED,
   MINT_LIST_PATH,
   connection,
-} from "./0_setting";
+} from "../0_setting";
 import { hex } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import { hash } from "@project-serum/anchor/dist/cjs/utils/sha256";
-import { NFT_RARITY_PROGRAM_ID, NFT_STAKING_PROGRAM_ID } from "../ts-v1";
+import { NFT_RARITY_PROGRAM_ID, NFT_STAKING_PROGRAM_ID } from "../../ts/v1";
 
 describe("write pool info to ids.ts", () => {
   const wallet = NodeWallet.local();
@@ -59,13 +57,13 @@ describe("write pool info to ids.ts", () => {
       poolInfoKeyList.push(poolInfoKey);
     }
 
-    fs.appendFileSync("./ts-v1/ids.ts", `\nexport const ALL_POOL_INFOS = [`);
+    fs.appendFileSync("./ts/v1/ids.ts", `\nexport const ALL_POOL_INFOS = [`);
     for (let _poolInfoKey of poolInfoKeyList) {
       fs.appendFileSync(
-        "./ts-v1/ids.ts",
+        "./ts/v1/ids.ts",
         `\n  new PublicKey("${poolInfoKey.toString()}"),`
       );
     }
-    fs.appendFileSync("./ts-v1/ids.ts", `\n];`);
+    fs.appendFileSync("./ts/v1/ids.ts", `\n];`);
   });
 });

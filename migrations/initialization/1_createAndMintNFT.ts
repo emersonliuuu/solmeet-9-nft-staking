@@ -3,13 +3,15 @@ import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import { createMint, mintTo, getAccount } from "@solana/spl-token";
 import * as fs from "fs";
-import { assert } from "chai";
 import {
   findAssociatedTokenAddress,
   createATAWithoutCheckIx,
-} from "../ts/utils";
-import { MINT_LIST_PATH, TOTAL_AMOUNT_OF_MINTS, connection } from "./0_setting";
-import { fstat } from "fs";
+} from "../../ts/v2/utils";
+import {
+  MINT_LIST_PATH,
+  TOTAL_AMOUNT_OF_MINTS,
+  connection,
+} from "../0_setting";
 
 describe("create nft mint and mint to wallet", () => {
   const wallet = NodeWallet.local();

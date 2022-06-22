@@ -3,8 +3,8 @@ import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { getAccount, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { hex } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import { hash } from "@project-serum/anchor/dist/cjs/utils/sha256";
-import { IDL as nftStakingIDL } from "../target/types/nft_staking";
-import { IDL as rarityIDL } from "../target/types/nft_rarity";
+import { IDL as nftStakingIDL } from "../../target/types/nft_staking";
+import { IDL as rarityIDL } from "../../target/types/nft_rarity";
 import { findAssociatedTokenAddress, createATAWithoutCheckIx } from "./utils";
 import { NFT_STAKING_PROGRAM_ID, NFT_RARITY_PROGRAM_ID } from "./ids";
 
@@ -46,11 +46,11 @@ export async function rarityInit(
   let config = {
     basePubkey: admin,
     fromPubkey: admin,
-    lamports: 115452480, // 116120640,
+    lamports: 115452480,
     newAccountPubkey: rarityInfo,
     programId: NFT_RARITY_PROGRAM_ID,
     seed: SEED.substring(0, 32),
-    space: 16460, // 8 + 32 + 32 + 4 + 512*32 //16556, // 8 + 32 + 64 + 64 + 4 + 512*32
+    space: 16460, // 8 + 32 + 32 + 4 + 512*32
   };
   let createAccountWithSeedIx = SystemProgram.createAccountWithSeed(config);
 

@@ -3,19 +3,19 @@ import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import { createMint, mintTo, getAccount } from "@solana/spl-token";
 import { assert } from "chai";
-import { IDL as nftStakingIDL } from "../target/types/nft_staking";
+import { IDL as nftStakingIDL } from "../../target/types/nft_staking";
 import {
   findAssociatedTokenAddress,
   createATAWithoutCheckIx,
-} from "../ts/utils";
-import * as nftFinanceSDK from "../ts";
-import { PoolInfo, RarityInfo } from "../ts/poolInfos";
+} from "../../ts/v2/utils";
+import * as nftFinanceSDK from "../../ts/v2";
+import { PoolInfo, RarityInfo } from "../../ts/v2/poolInfos";
 import {
   COLLECTION_SEED,
   RARITY_SEED,
   MINT_LIST_PATH,
   connection,
-} from "./0_setting";
+} from "../0_setting";
 
 describe("initialize pool info", () => {
   const wallet = NodeWallet.local();

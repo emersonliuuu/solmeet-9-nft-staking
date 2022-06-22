@@ -11,8 +11,8 @@ import { hash } from "@project-serum/anchor/dist/cjs/utils/sha256";
 import { NFT_RARITY_PROGRAM_ID, NFT_STAKING_PROGRAM_ID } from "./ids";
 import { find } from "lodash";
 import { findAssociatedTokenAddress } from "./utils";
-import { IDL as nftStakingIDL } from "../target/types/nft_staking";
-import { IDL as nftRarityIDL } from "../target/types/nft_rarity";
+import { IDL as nftStakingIDL } from "../../target/types/nft_staking";
+import { IDL as nftRarityIDL } from "../../target/types/nft_rarity";
 
 const RARITY_INFO_SEED = "rarity_info";
 const POOL_INFO_SEED = "pool_info";

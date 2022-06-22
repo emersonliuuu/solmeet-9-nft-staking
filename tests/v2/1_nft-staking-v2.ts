@@ -2,16 +2,15 @@ import * as anchor from "@project-serum/anchor";
 import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import { PublicKey } from "@solana/web3.js";
 import * as fs from "fs";
-import { findAssociatedTokenAddress } from "../ts/utils";
-import * as nftFinanceSDK from "../ts";
-import { AllInfo } from "../ts/poolInfos";
-import { UserInfo } from "../ts/userInfos";
+import { findAssociatedTokenAddress } from "../../ts/v2/utils";
+import * as nftFinanceSDK from "../../ts/v2";
+import { AllInfo } from "../../ts/v2/poolInfos";
 import {
   COLLECTION_SEED,
   RARITY_SEED,
   MINT_LIST_PATH,
   connection,
-} from "./0_setting";
+} from "../0_setting";
 
 describe("nft staking v2", () => {
   const wallet = NodeWallet.local();

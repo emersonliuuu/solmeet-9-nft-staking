@@ -1,33 +1,23 @@
 import * as anchor from "@project-serum/anchor";
-import { Program } from "@project-serum/anchor";
 import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import {
   PublicKey,
-  SystemProgram,
   Transaction,
   Connection,
   Commitment,
 } from "@solana/web3.js";
-import { createMint, mintTo, getAccount } from "@solana/spl-token";
-import { hex } from "@project-serum/anchor/dist/cjs/utils/bytes";
-import { hash } from "@project-serum/anchor/dist/cjs/utils/sha256";
-import { assert, use } from "chai";
-import { NftStaking } from "../target/types/nft_staking";
-import { NftRarity } from "../target/types/nft_rarity";
-import { NftMining } from "../target/types/nft_mining";
-import { IDL as nftStakingIDL } from "../target/types/nft_staking";
-import { IDL as nftRarityIDL } from "../target/types/nft_rarity";
-import { IDL as nftMiningIDL } from "../target/types/nft_mining";
-import * as nftFinanceSDK from "../ts";
-import { RarityInfo } from "../ts/poolInfos";
+import { assert } from "chai";
+import { IDL as nftRarityIDL } from "../../target/types/nft_rarity";
+import * as nftFinanceSDK from "../../ts/v2";
+import { RarityInfo } from "../../ts/v2/poolInfos";
 import {
   COLLECTION_SEED,
   RARITY_SEED,
   MINT_LIST_PATH,
   connection,
-} from "./0_setting";
+} from "../0_setting";
 
-describe("append mint to rarity info", () => {
+describe("initialize rarity info", () => {
   const wallet = NodeWallet.local();
   const options = anchor.AnchorProvider.defaultOptions();
   const provider = new anchor.AnchorProvider(connection, wallet, options);
@@ -44,12 +34,23 @@ describe("append mint to rarity info", () => {
   const rarityInfos: RarityInfo[] = [];
 
   it("Read Raw data", async () => {
+    console.log(`\nread ${COLLECTION_SEED} data to mint list`);
+    console.log(`\nStart ${COLLECTION_SEED} Initialization...`);
+
     // read raw data from PATH and pack as RawRarityInfo[]
     rawRarityInfos = nftFinanceSDK.utils.readMintFromJson(
       COLLECTION_SEED,
       RARITY_SEED,
       MINT_LIST_PATH
     );
+
+    rawRarityInfos.map((rawRarityInfo) => {
+      console.log("\ncollection:", rawRarityInfo.collection);
+      console.log("rarity:", rawRarityInfo.rarity);
+      console.log("amount:", rawRarityInfo.mintList.length);
+    });
+
+    console.log(`\n\nInit state for ${COLLECTION_SEED}`);
 
     let total = 0;
     for (let rawRarityInfo of rawRarityInfos) {
@@ -86,42 +87,36 @@ describe("append mint to rarity info", () => {
 
         total += subMintList.length;
       }
+      console.log(`total: ${total}`);
     }
   });
 
-  it("append NFT mint to mint list", async () => {
-    let allTxn: Transaction[] = [];
+  it("initialize rairty info", async () => {
+    const allTxn: Transaction[] = [];
 
     for (let rarityInfo of rarityInfos) {
-      const txn = await nftFinanceSDK.txn.appendMintToRarityInfoTxn(
+      const txn = await nftFinanceSDK.txn.initiateRarityInfoTxn(
         rarityInfo,
-        rarityInfo.mintList,
         provider
       );
-      allTxn = allTxn.concat(txn);
+      allTxn.push(txn);
     }
 
     const resumeTxnIndex = 0; // change to the failed txn index
     await nftFinanceSDK.utils.sendAndLog(
       allTxn,
-      COLLECTION_SEED + RARITY_SEED + "appendMint",
+      COLLECTION_SEED + RARITY_SEED + "initRarityInfo",
       wallet,
       provider,
       resumeTxnIndex
     );
-  });
 
-  it("check all append is correct", async () => {
     const fetchAllRarityInfo = await rarityProgram.account.rarityInfo.all();
 
     let count = 0;
     for (let fetchRarityInfo of fetchAllRarityInfo) {
       for (let rarityInfo of rarityInfos) {
         if (fetchRarityInfo.publicKey.equals(rarityInfo.key)) {
-          assert.deepEqual(
-            fetchRarityInfo.account.mintList,
-            rarityInfo.mintList
-          );
           count += 1;
         }
       }

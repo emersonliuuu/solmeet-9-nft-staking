@@ -8,9 +8,8 @@ import {
 } from "@solana/web3.js";
 import { NFT_RARITY_PROGRAM_ID, NFT_STAKING_PROGRAM_ID } from "./ids";
 import { find, min } from "lodash";
-import { IDL as nftStakingIDL } from "../target/types/nft_staking";
-import { IDL as nftRarityIDL } from "../target/types/nft_rarity";
-import { IDL as nftMiningIDL } from "../target/types/nft_mining";
+import { IDL as nftStakingIDL } from "../../target/types/nft_staking";
+import { IDL as nftRarityIDL } from "../../target/types/nft_rarity";
 import { AllInfo } from "./poolInfos";
 
 export class NFTVault {

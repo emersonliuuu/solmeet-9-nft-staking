@@ -1,8 +1,8 @@
 import * as anchor from "@project-serum/anchor";
 import { PublicKey } from "@solana/web3.js";
 import { getAccount, TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { IDL as nftStakingIDL } from "../target/types/nft_staking";
-import { IDL as nftRarityIDL } from "../target/types/nft_rarity";
+import { IDL as nftStakingIDL } from "../../target/types/nft_staking";
+import { IDL as nftRarityIDL } from "../../target/types/nft_rarity";
 import { findAssociatedTokenAddress, createATAWithoutCheckIx } from "./utils";
 import { NFT_STAKING_PROGRAM_ID, NFT_RARITY_PROGRAM_ID } from "./ids";
 import { PoolInfo, RarityInfo } from "./poolInfos";
