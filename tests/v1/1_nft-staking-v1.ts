@@ -26,16 +26,6 @@ describe("nft staking v1", () => {
   let poolInfos: PublicKey[];
   let nftMintList: PublicKey[] = [];
 
-  it("general pool info", async () => {
-    // find poolInfoAccount
-    poolInfoKey = await nftFinanceSDK.getPoolInfoKeyFromSeed(
-      wallet.publicKey,
-      COLLECTION_SEED,
-      RARITY_SEED,
-      0
-    );
-  });
-
   it("read nft mint", async () => {
     const rawData = fs.readFileSync(MINT_LIST_PATH, "utf-8");
     const data: string[] = JSON.parse(rawData);
@@ -56,40 +46,7 @@ describe("nft staking v1", () => {
   });
 
   it("stake nft", async () => {
-    const pairs = await nftFinanceSDK.rarityFilter(nftMintList, provider);
-
-    const pairsClassify: Classify[] = [];
-    for (let pair of pairs) {
-      const nftTokenAccount = await findAssociatedTokenAddress(
-        wallet.publicKey,
-        pair.mint
-      );
-      const target = pairsClassify.filter((item) =>
-        item.poolInfoKey.equals(pair.poolInfoKey)
-      );
-      if (target.length == 0) {
-        pairsClassify.push({
-          poolInfoKey: pair.poolInfoKey,
-          NftTokenAccountList: [nftTokenAccount],
-        });
-      } else {
-        target[0].NftTokenAccountList.push(nftTokenAccount);
-      }
-    }
-
-    for (let classify of pairsClassify) {
-      console.log(`poolInfo: ${classify.poolInfoKey.toString()}`);
-      const stakeTxn = await nftFinanceSDK.stake(
-        wallet.publicKey,
-        classify.poolInfoKey,
-        classify.NftTokenAccountList,
-        provider
-      );
-      for (let txn of stakeTxn) {
-        const result = await provider.sendAndConfirm(txn, [wallet.payer]);
-        console.log("<Stake>", result);
-      }
-    }
+    // TODO
   });
 
   it("staked status: after stake", async () => {
@@ -104,37 +61,6 @@ describe("nft staking v1", () => {
   });
 
   it("unstake nft", async () => {
-    const userStakedNft = await nftFinanceSDK.getStakedNFTMint(
-      wallet.publicKey,
-      provider
-    );
-
-    const pairsClassify: Classify[] = [];
-    for (let pair of userStakedNft) {
-      const target = pairsClassify.filter((item) =>
-        item.poolInfoKey.equals(pair.poolInfoKey)
-      );
-      if (target.length == 0) {
-        pairsClassify.push({
-          poolInfoKey: pair.poolInfoKey,
-          NftTokenAccountList: [pair.nftMint],
-        });
-      } else {
-        target[0].NftTokenAccountList.push(pair.nftMint);
-      }
-    }
-
-    for (let classify of pairsClassify) {
-      const unstakeTxn = await nftFinanceSDK.unstake(
-        wallet.publicKey,
-        classify.poolInfoKey,
-        classify.NftTokenAccountList,
-        provider
-      );
-      for (let txn of unstakeTxn) {
-        const result = await provider.sendAndConfirm(txn, [wallet.payer]);
-        console.log("<Unstake>", result);
-      }
-    }
+    // TODO
   });
 });

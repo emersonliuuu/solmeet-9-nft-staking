@@ -132,34 +132,8 @@ export async function stakeTxn(
   userNftAccountList: PublicKey[],
   provider: anchor.AnchorProvider
 ) {
-  const ixArr: anchor.web3.TransactionInstruction[] = [];
-  const createAtaTxnArr: Transaction[] = [];
-  const stakeTxnArr: Transaction[] = [];
-  for (let [index, userNftAccount] of userNftAccountList.entries()) {
-    const StakeIxArr = await ix.stakeIx(
-      poolInfo,
-      user,
-      userNftAccount,
-      provider
-    );
-    if (index == 0) {
-      ixArr.push(StakeIxArr[StakeIxStatus.createUserProveTokenAtaIx]);
-    }
-    ixArr.push(StakeIxArr[StakeIxStatus.createNFTVaultAtaIx]);
-    const stakeTx = new Transaction();
-    stakeTx.add(StakeIxArr[StakeIxStatus.stakeIx]);
-    stakeTxnArr.push(stakeTx);
-  }
-  let txn = new Transaction();
-  for (let [index, instruction] of ixArr.entries()) {
-    txn.add(instruction);
-    if ((index + 1) % ATA_TX_PER_BATCH == 0 || index == ixArr.length - 1) {
-      createAtaTxnArr.push(txn);
-      txn = new Transaction();
-    }
-  }
-
-  const allTxn = createAtaTxnArr.concat(stakeTxnArr);
+  const allTxn: Transaction[] = [];
+  // TODO
 
   return allTxn;
 }
@@ -171,15 +145,7 @@ export async function unstakeTxn(
   provider: anchor.AnchorProvider
 ) {
   const allTxn: Transaction[] = [];
-
-  for (let nftMint of nftMintList) {
-    const createAtaIx = await createATAWithoutCheckIx(user, nftMint);
-    const unstakeIx = await ix.unstakeIx(poolInfo, user, nftMint, provider);
-    const txn = new Transaction();
-    txn.add(createAtaIx);
-    txn.add(unstakeIx);
-    allTxn.push(txn);
-  }
+  // TODO
 
   return allTxn;
 }

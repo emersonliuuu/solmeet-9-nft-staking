@@ -314,87 +314,8 @@ export async function stake(
   nftAccountList: PublicKey[],
   provider: anchor.Provider
 ) {
-  anchor.setProvider(provider);
-  const NftStakingProgram = new anchor.Program(
-    nftStakingIDL,
-    NFT_STAKING_PROGRAM_ID,
-    provider
-  );
-
-  // fetch poolInfo
-  const poolInfoAccount = await NftStakingProgram.account.poolInfo.fetch(
-    poolInfo
-  );
-
-  // create user prove token ATA
-  const userProveTokenAccount = await findAssociatedTokenAddress(
-    user,
-    poolInfoAccount.proveTokenMint
-  );
-  const createProveTokenAtaIx = await createATAWithoutCheckIx(
-    user,
-    poolInfoAccount.proveTokenMint
-  );
-
-  const createAtaIxArr: anchor.web3.TransactionInstruction[] = [];
-  createAtaIxArr.push(createProveTokenAtaIx);
-
-  const stakeTxArr: Transaction[] = [];
-  for (let userNftAccount of nftAccountList) {
-    const nftAccount = await getAccount(provider.connection, userNftAccount);
-    const nftMint = nftAccount.mint;
-
-    const [nftVaultAccount, _] = await PublicKey.findProgramAddress(
-      [nftMint.toBuffer(), poolInfo.toBuffer(), Buffer.from(NFT_VAULT_SEED)],
-      NftStakingProgram.programId
-    );
-
-    // create nft vault ATA
-    let nftVaultAta = await findAssociatedTokenAddress(
-      nftVaultAccount,
-      nftMint
-    );
-    const createAtaIx = await createATAWithoutCheckIx(
-      nftVaultAccount,
-      nftMint,
-      user
-    );
-
-    createAtaIxArr.push(createAtaIx);
-
-    const StakeTx = NftStakingProgram.transaction.stake({
-      accounts: {
-        user,
-        poolInfo,
-        nftMint,
-        userNftAccount,
-        nftVaultAta,
-        userProveTokenAccount,
-        nftVaultAccount,
-        proveTokenMint: poolInfoAccount.proveTokenMint,
-        rarityInfo: poolInfoAccount.rarityInfo,
-        proveTokenAuthority: poolInfoAccount.proveTokenAuthority,
-        proveTokenVault: poolInfoAccount.proveTokenVault,
-        systemProgram: anchor.web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-      },
-    });
-    stakeTxArr.push(StakeTx);
-  }
-
-  const createAtaTxArr: Transaction[] = [];
-  let tx = new Transaction();
-  for (let [index, ix] of createAtaIxArr.entries()) {
-    tx.add(ix);
-    if (
-      (index + 1) % ATA_TX_PER_BATCH == 0 ||
-      index == createAtaIxArr.length - 1
-    ) {
-      createAtaTxArr.push(tx);
-      tx = new Transaction();
-    }
-  }
-  const allTx = createAtaTxArr.concat(stakeTxArr);
+  // TODO
+  const allTx: Transaction[] = [];
 
   return allTx;
 }
@@ -405,59 +326,8 @@ export async function unstake(
   nftList: PublicKey[],
   provider: anchor.Provider
 ) {
-  anchor.setProvider(provider);
-  const NftStakingProgram = new anchor.Program(
-    nftStakingIDL,
-    NFT_STAKING_PROGRAM_ID,
-    provider
-  );
+  // TODO
+  const allTx: Transaction[] = [];
 
-  // fetch poolInfo
-  const poolInfoAccount = await NftStakingProgram.account.poolInfo.fetch(
-    poolInfo
-  );
-
-  // create user prove token ATA
-  const userProveTokenAccount = await findAssociatedTokenAddress(
-    user,
-    poolInfoAccount.proveTokenMint
-  );
-
-  const unstakeTxPromises = nftList.map(async (nftMint) => {
-    const [nftVaultAccount, _] = await PublicKey.findProgramAddress(
-      [nftMint.toBuffer(), poolInfo.toBuffer(), Buffer.from(NFT_VAULT_SEED)],
-      NftStakingProgram.programId
-    );
-
-    let userNftAccount = await findAssociatedTokenAddress(user, nftMint);
-    const createAtaIx = await createATAWithoutCheckIx(user, nftMint);
-
-    // create nft vault ATA
-    let nftVaultAta = await findAssociatedTokenAddress(
-      nftVaultAccount,
-      nftMint
-    );
-
-    const UnstakeTx = NftStakingProgram.transaction.unstake({
-      accounts: {
-        user,
-        poolInfo,
-        nftMint,
-        userNftAccount,
-        nftVaultAta,
-        userProveTokenAccount,
-        nftVaultAccount,
-        proveTokenMint: poolInfoAccount.proveTokenMint,
-        rarityInfo: poolInfoAccount.rarityInfo,
-        proveTokenAuthority: poolInfoAccount.proveTokenAuthority,
-        proveTokenVault: poolInfoAccount.proveTokenVault,
-        tokenProgram: TOKEN_PROGRAM_ID,
-      },
-      preInstructions: [createAtaIx],
-    });
-
-    return UnstakeTx;
-  });
-
-  return Promise.all(unstakeTxPromises);
+  return allTx;
 }
