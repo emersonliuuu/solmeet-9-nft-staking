@@ -6,7 +6,7 @@
 import { Connection, Commitment } from "@solana/web3.js";
 
 // Initialize setting
-export const COLLECTION_SEED = "MyCollection"; // must <= 16 characters
+export const COLLECTION_SEED = "SolMeet9"; // must <= 16 characters
 export const RARITY_SEED = "SSR"; // must <= 16 characters
 export const TOTAL_AMOUNT_OF_MINTS = 10;
 export const MINT_LIST_PATH = "./mintList/nft_mints.json";
